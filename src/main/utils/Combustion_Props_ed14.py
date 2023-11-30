@@ -7,7 +7,7 @@ The names must match those used in the Cantera NASA.cti file.
 For Type 2 Fuels water to be added,
 for example to reduce NOx in oil combustion, or to accommodate the water content in biomass fuels
 
-Timothy Griffin, FHNW Windisch, May 2021'''
+Timothy Griffin, FHNW Windisch, May 2021 ... Updated 29 November 2021'''
 
 import numpy as np
 from scipy import optimize
@@ -52,7 +52,7 @@ class Fuel_1(object):
 
         # Setting the fuel mixture in Cantera
         # Create a dict of species keyed by their names for entire NASA list
-        S = {s.name: s for s in ct.Species.listFromFile('nasa.cti')}
+        S = {s.name: s for s in ct.Species.listFromFile('nasa.xml')}
         SpecSet = []
         # Adding the components for the object fuel
         for i in range (len(self.comp)):
@@ -102,7 +102,7 @@ class Fuel_1(object):
         self.e = self.a * 3.76 
         self.f = self.Nm/2 
         
-        print('The fuel is C_%0.1f' %(self.Cm),'H_%0.3f' %(self.Hm), 'O_%0.3f' %(self.Om))
+        print('The fuel is C_%0.3f' %(self.Cm),'H_%0.3f' %(self.Hm), 'O_%0.3f' %(self.Om))
 
     def Hu(self): # in MJ/kg  fuel
         # for fuels without S and N
@@ -118,7 +118,7 @@ class Fuel_1(object):
         return self.Hu() + mu_H2O * (2.4423)
 
     def Omin(self): # this is calculated for 1 kmol fuel
-        return self.C_Factor * (self.Cm + 1/4 * self.Hm + self.Sm - self.Om)
+        return self.C_Factor * (self.Cm + 1/4 * self.Hm + self.Sm - 0.5*self.Om)
 
     def omin(self): # this is calculated for 1 kg fuel
         return self.Omin() * 31.9988/self.mw
@@ -436,7 +436,7 @@ class Fuel_2(object):
         self.e = self.a * 3.76
         self.f = self.Nm_w/2
         
-        print('The fuel is C_%0.1f' %(self.Cm_w),'H_%0.3f' %(self.Hm_w), 'O_%0.3f' %(self.Om_w), \
+        print('The fuel is C_%0.3f' %(self.Cm_w),'H_%0.3f' %(self.Hm_w), 'O_%0.3f' %(self.Om_w), \
               'with "Wassergehalt" of %0.2f' %(self.w))
         
     def omin(self): # this is calculated for 1 kg wet fuel
